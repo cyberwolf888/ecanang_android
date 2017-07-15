@@ -36,7 +36,8 @@
         <activity android:name=".MyTransactionActivity" />
         <activity android:name=".CompleteActivity" />
         <activity android:name=".DetailTransactionActivity" />
-        <activity android:name=".BayarActivity"></activity>
+        <activity android:name=".BayarActivity" />
+        <activity android:name=".MyAccountActivity"></activity>
     </application>
 
 </manifest>

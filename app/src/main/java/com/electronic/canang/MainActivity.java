@@ -189,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         }
         if (id == R.id.action_account) {
-            //Intent i = new Intent(MainActivity.this, LoginActivity.class);
-            //startActivity(i);
+            Intent i = new Intent(MainActivity.this, MyAccountActivity.class);
+            startActivity(i);
         }
 
         if (id == R.id.action_logout) {

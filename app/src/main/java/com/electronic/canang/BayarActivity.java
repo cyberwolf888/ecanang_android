@@ -1,15 +1,22 @@
 package com.electronic.canang;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import com.electronic.canang.utility.RequestServer;
 import com.electronic.canang.utility.Session;
@@ -35,6 +43,8 @@ public class BayarActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     private Session session;
     private final static int SELECT_PHOTO = 12345;
+    private final static int WRITE_EXTERNAL_RESULT = 105;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +58,19 @@ public class BayarActivity extends AppCompatActivity {
         imgBukti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                if(shouldAskPermission()){
+                    if(CheckStoragePermission()){
+                        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                        photoPickerIntent.setType("image/*");
+                        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Aplikasi tidak diizinkan untuk mengakses file.", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                }
             }
         });
 
@@ -66,6 +86,50 @@ public class BayarActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    private boolean shouldAskPermission(){
+
+        return(Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP_MR1);
+
+    }
+    @TargetApi(Build.VERSION_CODES.M)
+    public boolean CheckStoragePermission() {
+        int permissionCheckRead = ContextCompat.checkSelfPermission(BayarActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheckRead != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) BayarActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                ActivityCompat.requestPermissions((Activity) BayarActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        WRITE_EXTERNAL_RESULT);
+            } else {
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions((Activity) BayarActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        WRITE_EXTERNAL_RESULT);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+            return false;
+        } else{
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
+        /*
+        if(permsRequestCode == WRITE_EXTERNAL_RESULT){
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        }
+        */
     }
 
     @Override
