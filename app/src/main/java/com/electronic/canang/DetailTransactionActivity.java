@@ -1,9 +1,12 @@
 package com.electronic.canang;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -107,5 +110,47 @@ public class DetailTransactionActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Button btnCancel = (Button) findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(DetailTransactionActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Batal")
+                        .setMessage("Apakah anda yakin untuk membatalkan transaksi ini?")
+                        .setPositiveButton("Iya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                cancel();
+                            }
+                        })
+                        .setNegativeButton("Tidak",null)
+                        .show();
+            }
+        });
+        if(status.equals("0")){
+            btnCancel.setVisibility(View.GONE);
+        }
+    }
+
+    private void cancel(){
+        String url = new RequestServer().getServer_url() + "cancel";
+        Log.d("url",">"+url);
+        JsonObject jsonReq = new JsonObject();
+        jsonReq.addProperty("transaksi_id", id_transaksi);
+        Log.d("jsonReq",">"+jsonReq);
+        Ion.with(DetailTransactionActivity.this)
+                .load(url)
+                .setJsonObjectBody(jsonReq)
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        Log.d("Result",">"+result);
+                        finish();
+                    }
+                });
+        finish();
     }
 }
