@@ -88,7 +88,7 @@ public class MyTransactionActivity extends AppCompatActivity {
                                 JsonObject objData = data.get(i).getAsJsonObject();
                                 String photo = "";
                                 if(!objData.get("img_bukti").isJsonNull()){
-                                    photo = new RequestServer().getImg_url()+objData.get("img_bukti").getAsString();
+                                    photo = objData.get("img_bukti").getAsString();
                                 }
                                 transaksi.add(new Transaksi(
                                         objData.get("id").getAsString(),

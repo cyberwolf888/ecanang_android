@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.electronic.canang.utility.Helper;
@@ -131,6 +132,17 @@ public class DetailTransactionActivity extends AppCompatActivity {
         });
         if(status.equals("0")){
             btnCancel.setVisibility(View.GONE);
+        }
+        Log.d("url img",">"+img_bukti);
+        if(!img_bukti.equals("")){
+            Log.d("url img",">"+new RequestServer().getServer_url()+"../assets/img/pembayaran/"+img_bukti);
+            ImageView imgBukti = (ImageView) findViewById(R.id.imgBukti);
+            Ion.with(DetailTransactionActivity.this)
+                    .load(new RequestServer().getServer_url()+"../assets/img/pembayaran/"+img_bukti)
+                    .withBitmap()
+                    .placeholder(R.drawable.noimage)
+                    .error(R.drawable.noimage)
+                    .intoImageView(imgBukti);
         }
     }
 
