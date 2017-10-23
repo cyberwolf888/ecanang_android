@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
             JsonObject jsonReq = new JsonObject();
             jsonReq.addProperty("getCanang", true);
 
+            Log.d("url",">"+url);
+
             Ion.with(MainActivity.this)
                     .load(url)
                     .setJsonObjectBody(jsonReq)
@@ -86,26 +89,30 @@ public class MainActivity extends AppCompatActivity {
                     .setCallback(new FutureCallback<JsonObject>() {
                         @Override
                         public void onCompleted(Exception e, JsonObject result) {
-                            data = result.getAsJsonArray("data");
-                            for (int i=0; i<data.size(); i++){
-                                JsonObject objData = data.get(i).getAsJsonObject();
-                                String photo = "";
-                                if(!objData.get("image").isJsonNull()){
-                                    photo = new RequestServer().getImg_url()+objData.get("image").getAsString();
+                            try{
+                                data = result.getAsJsonArray("data");
+                                for (int i=0; i<data.size(); i++){
+                                    JsonObject objData = data.get(i).getAsJsonObject();
+                                    String photo = "";
+                                    if(!objData.get("image").isJsonNull()){
+                                        photo = new RequestServer().getImg_url()+objData.get("image").getAsString();
+                                    }
+                                    canangs.add(new Canang(
+                                            objData.get("id").getAsString(),
+                                            objData.get("nama_paket").getAsString(),
+                                            photo,
+                                            objData.get("harga").getAsString(),
+                                            objData.get("keterangan").getAsString(),
+                                            objData.get("status").getAsString()
+                                    ));
                                 }
-                                canangs.add(new Canang(
-                                        objData.get("id").getAsString(),
-                                        objData.get("nama_paket").getAsString(),
-                                        photo,
-                                        objData.get("harga").getAsString(),
-                                        objData.get("keterangan").getAsString(),
-                                        objData.get("status").getAsString()
-                                ));
-                            }
 
-                            mAdapter = new CanangAdapter(MainActivity.this, canangs);
-                            mRecyclerView.setAdapter(mAdapter);
-                            mRecyclerView.setLayoutManager(mLayoutManager);
+                                mAdapter = new CanangAdapter(MainActivity.this, canangs);
+                                mRecyclerView.setAdapter(mAdapter);
+                                mRecyclerView.setLayoutManager(mLayoutManager);
+                            }catch (Exception ex){
+
+                            }
 
                             showProgress(false);
                         }

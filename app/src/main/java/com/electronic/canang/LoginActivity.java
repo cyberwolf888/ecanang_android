@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -211,6 +212,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             JsonObject jsonReq = new JsonObject();
             jsonReq.addProperty("email", email);
             jsonReq.addProperty("password", password);
+            Log.d("url",">"+url);
 
             Ion.with(LoginActivity.this)
                     .load(url)
@@ -227,6 +229,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 ComponentName cn = i.getComponent();
                                 Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
                                 startActivity(mainIntent);
+                            }else{
+                                showProgress(false);
+                                Snackbar.make(mEmailView, "Email atau password anda salah.", Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("Tutup", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+
+                                            }
+                                        }).show();
                             }
                         }
                     });
