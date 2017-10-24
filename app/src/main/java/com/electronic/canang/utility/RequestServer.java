@@ -2,7 +2,7 @@ package com.electronic.canang.utility;
 
 
 public class RequestServer {
-    private String server_ip = "ecanang.ml";
+    private String server_ip = "www.ecanang.ml";
     private String server_url = "/api/";
     private String img_url = "/assets/img/paket/";
 
