@@ -3,10 +3,13 @@ package com.electronic.canang;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        session = new Session(this);
         setContentView(R.layout.activity_register);
 
         Button btnRegister = (Button) findViewById(R.id.btnRegister);
@@ -152,8 +156,12 @@ public class RegisterActivity extends AppCompatActivity {
                             public void onCompleted(Exception e, JsonObject result) {
                                 String status = result.get("status").toString();
                                 if (status.equals("1")){
-                                    Toast.makeText(getApplicationContext(), "Register Berhasil! Akun anda sudah aktif.", Toast.LENGTH_LONG).show();
-                                    finish();
+                                    JsonObject data = result.getAsJsonObject("data");
+                                    session.createLoginSession(data.get("id").getAsString(),data.get("name").getAsString(),data.get("address").getAsString(),data.get("telp").getAsString());
+                                    Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                                    ComponentName cn = i.getComponent();
+                                    Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+                                    startActivity(mainIntent);
                                 }else{
                                     Toast.makeText(getApplicationContext(), result.get("error").toString(), Toast.LENGTH_LONG).show();
                                 }
