@@ -32,6 +32,8 @@ public class DetailTransactionActivity extends AppCompatActivity {
     private String created_at;
     private String label_status;
     private String nama_paket;
+    private String feedback;
+    private String img_feedback;
 
     private Session session;
 
@@ -50,6 +52,8 @@ public class DetailTransactionActivity extends AppCompatActivity {
         created_at = getIntent().getStringExtra("created_at");
         label_status = getIntent().getStringExtra("label_status");
         nama_paket = getIntent().getStringExtra("nama_paket");
+        feedback = getIntent().getStringExtra("feedback");
+        img_feedback = getIntent().getStringExtra("img_feedback");
 
         setContentView(R.layout.activity_detail_transaction);
 
@@ -143,6 +147,21 @@ public class DetailTransactionActivity extends AppCompatActivity {
                     .placeholder(R.drawable.noimage)
                     .error(R.drawable.noimage)
                     .intoImageView(imgBukti);
+        }
+        if(!feedback.equals("0")){
+            TextView tvFeedback = (TextView) findViewById(R.id.tvFeedback);
+            tvFeedback.setVisibility(View.VISIBLE);
+            tvFeedback.setText(feedback);
+        }
+        if(!img_feedback.equals("0")){
+            ImageView imgFeedback = (ImageView) findViewById(R.id.imgFeedback);
+            imgFeedback.setVisibility(View.VISIBLE);
+            Ion.with(DetailTransactionActivity.this)
+                    .load(img_feedback)
+                    .withBitmap()
+                    .placeholder(R.drawable.noimage)
+                    .error(R.drawable.noimage)
+                    .intoImageView(imgFeedback);
         }
     }
 

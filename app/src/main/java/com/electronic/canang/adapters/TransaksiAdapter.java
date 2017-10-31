@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,9 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.Tran
                     i.putExtra("created_at",feedItem.created_at);
                     i.putExtra("label_status",feedItem.label_status);
                     i.putExtra("nama_paket",feedItem.nama_paket);
+                    i.putExtra("feedback",feedItem.feedback);
+                    i.putExtra("img_feedback",feedItem.img_feedback);
+                    Log.d("feedItem",">"+feedItem.img_feedback);
                     mContext.startActivity(i);
                 }
             });

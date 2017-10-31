@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -101,9 +102,12 @@ public class MyTransactionActivity extends AppCompatActivity {
                                         objData.get("status").getAsString(),
                                         objData.get("created_at").getAsString(),
                                         objData.get("label_status").getAsString(),
-                                        objData.get("nama_paket").getAsString()
+                                        objData.get("nama_paket").getAsString(),
+                                        objData.get("feedback").getAsString(),
+                                        objData.get("img_feedback").getAsString()
                                 ));
                             }
+                            Log.d("data",">"+data);
                             mAdapter = new TransaksiAdapter(MyTransactionActivity.this, transaksi);
                             mRecyclerView.setAdapter(mAdapter);
                             mRecyclerView.setLayoutManager(mLayoutManager);

@@ -13,8 +13,24 @@ public class Transaksi {
     public String created_at;
     public String label_status;
     public String nama_paket;
+    public String feedback;
+    public String img_feedback;
 
-    public Transaksi(String id_transaksi,String canang_id,String user_id,String telp,String address,String total,String img_bukti,String status,String created_at,String label_status,String nama_paket)
+    public Transaksi(
+            String id_transaksi,
+            String canang_id,
+            String user_id,
+            String telp,
+            String address,
+            String total,
+            String img_bukti,
+            String status,
+            String created_at,
+            String label_status,
+            String nama_paket,
+            String feedback,
+            String img_feedback
+    )
     {
         this.id_transaksi = id_transaksi;
         this.canang_id = canang_id;
@@ -27,5 +43,7 @@ public class Transaksi {
         this.created_at = created_at;
         this.label_status = label_status;
         this.nama_paket = nama_paket;
+        this.feedback = feedback;
+        this.img_feedback = img_feedback;
     }
 }
